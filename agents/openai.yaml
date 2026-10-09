@@ -1,0 +1,11 @@
+interface:
+  display_name: "严谨论文评审"
+  short_description: "分层核查论文主张与证据，审查创新性、实验公平性和科学有效性"
+  default_prompt: "使用 $review-papers-rigorously 评审这篇论文，区分作者主张、直接证据、合理推断与未验证部分，并检查 novelty、baselines、ablations、比较公平性、假设、局限与不确定性。"
+policy:
+  products:
+  - "chatgpt"
+  - "codex"
+  - "api"
+  - "atlas"
+  allow_implicit_invocation: true

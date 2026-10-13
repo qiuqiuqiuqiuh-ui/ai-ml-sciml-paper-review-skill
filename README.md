@@ -1,8 +1,8 @@
-# Rigorous Paper Review
+# Evidence-Grounded AI/ML/SciML Paper Review Skill
 
 An evidence-grounded agent skill for AI, ML, and SciML paper review, with claim–evidence tracking and reproducibility checks.
 
-[中文说明](README.zh-CN.md) · [Example review](examples/resnet-review.md) · [Contributing](CONTRIBUTING.md) · [CI](https://github.com/qiuqiuqiuqiuh-ui/rigorous-paper-review/actions/workflows/validate.yml) · [MIT license](LICENSE)
+[中文说明](README.zh-CN.md) · [Example review](examples/resnet-review.md) · [Contributing](CONTRIBUTING.md) · [CI](https://github.com/qiuqiuqiuqiuh-ui/ai-ml-sciml-paper-review-skill/actions/workflows/validate.yml) · [MIT license](LICENSE)
 
 ## What makes it useful
 
@@ -19,12 +19,12 @@ This is a skill, not a standalone review service. Codex is the tested host. Resp
 Clone the repository into a development directory, then install its skill files. The installer uses Python 3.10+ and only the standard library; using the installed skill itself does not require Python. Substitute your Python 3 executable for `python` if needed.
 
 ```bash
-git clone https://github.com/qiuqiuqiuqiuh-ui/rigorous-paper-review.git
-cd rigorous-paper-review
+git clone https://github.com/qiuqiuqiuqiuh-ui/ai-ml-sciml-paper-review-skill.git
+cd ai-ml-sciml-paper-review-skill
 python scripts/install_skill.py
 ```
 
-The repository name is **rigorous-paper-review**. The installation directory and invocation name remain **review-papers-rigorously** for compatibility. The default destination is `$CODEX_HOME/skills/review-papers-rigorously`, or `~/.codex/skills/review-papers-rigorously` when `CODEX_HOME` is unset. The updated skill is available on your next turn.
+The repository name is **ai-ml-sciml-paper-review-skill**. The installation directory and invocation name remain **review-papers-rigorously** for compatibility. The default destination is `$CODEX_HOME/skills/review-papers-rigorously`, or `~/.codex/skills/review-papers-rigorously` when `CODEX_HOME` is unset. The updated skill is available on your next turn.
 
 ## Use
 

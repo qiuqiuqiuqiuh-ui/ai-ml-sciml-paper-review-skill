@@ -11,7 +11,7 @@ class InstallationTests(unittest.TestCase):
         self.temp = tempfile.TemporaryDirectory()
         self.addCleanup(self.temp.cleanup)
         self.base = Path(self.temp.name)
-        self.source = self.base / "rigorous-paper-review"
+        self.source = self.base / "repo-checkout"
         self.source.mkdir()
         (self.source / "SKILL.md").write_text("---\nname: review-papers-rigorously\ndescription: Review papers.\n---\n# Version one\n", encoding="utf-8")
         (self.source / "references").mkdir()

@@ -3,10 +3,11 @@
   "context": "Fresh Codex evaluator context, baseline batch of five cases; no rubric or prior outputs; offline",
   "model_id": null,
   "base_commit": "5fb84fb3ddc8aaac8ee9e762f8f12306ea69af91",
+  "evaluated_source_commit": "a3101bc2417b6330dac77ce3c01c5d345d9e9e6a",
   "hash_format": "SHA256 of UTF-8 bytes with CRLF normalized to LF",
   "baseline_skill_sha256": "65c401b9939c1fcf2a0c12701d00f053cd6ea44f279677013fc91d7d526d83b2",
   "baseline_skill_raw_sha256": "7e424d9857133c48899d504ca2b6b6a5fbd440bdb758dbd253137c3c26fa8e5f",
-  "baseline_skill_reconstruction": "Final SKILL.md with the abstract/excerpt locator-verification sentence removed",
+  "baseline_skill_reconstruction": "SKILL.md at evaluated_source_commit with the abstract/excerpt locator-verification sentence removed",
   "inputs": {
     "01-abstract-only.md": "f45e8fab82d6017076ed13f5e0503093d995fe31361577782ce6697cd756773c",
     "02-theory.md": "ebdbcc844ade8acdd73a3e17f5154f4cc1954186bc99c47dc634aca19d34ca4c",

@@ -11,7 +11,7 @@ class ValidationTests(unittest.TestCase):
     def setUp(self):
         self.temp = tempfile.TemporaryDirectory()
         self.addCleanup(self.temp.cleanup)
-        self.root = Path(self.temp.name) / "rigorous-paper-review"
+        self.root = Path(self.temp.name) / "repo-checkout"
         self.root.mkdir()
         self.skill = self.root / "SKILL.md"
         self.header = "---\nname: review-papers-rigorously\ndescription: Review research paper evidence.\n---\n"
@@ -24,7 +24,7 @@ class ValidationTests(unittest.TestCase):
         self.assertEqual(validate(self.root), [])
 
     def test_zip_directory_is_valid(self):
-        renamed = self.root.with_name("rigorous-paper-review-main")
+        renamed = self.root.with_name("repo-checkout-main")
         self.root.rename(renamed)
         self.assertEqual(validate(renamed), [])
 

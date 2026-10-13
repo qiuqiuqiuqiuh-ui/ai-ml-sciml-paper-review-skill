@@ -12,7 +12,7 @@ This is a manual assessment of five synthetic exercises. The evaluator received 
 | [04: PINN](baseline/04-pinn-residual.md) | Passed | Derives u(t)=1 and checks the explicit initial-condition violation of the zero model. |
 | [05: rebuttal](baseline/05-rebuttal.md) | Passed | Retains R1/R2, resolves R1's reporting request, and keeps R2 unresolved because the reply only promises a future experiment. |
 
-The observed locator error led to one narrow skill change: abstract/excerpt locations may use material titles and keywords; sentence numbers and line numbers require verification. The baseline responses remain available, including the error. The accompanying [manifest](manifest.json) identifies evaluated input, skill, reference, and response versions by SHA256.
+The observed locator error led to one narrow skill change: abstract/excerpt locations may use material titles and keywords; sentence numbers and line numbers require verification. The baseline responses remain available, including the error. The accompanying [manifest](manifest.json) identifies evaluated input, skill, reference, and response versions by SHA256 and pins the evaluated source to commit a3101bc, before later display-name changes.
 
 ## Targeted retest
 

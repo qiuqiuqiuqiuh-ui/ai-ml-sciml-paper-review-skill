@@ -1,4 +1,4 @@
-# 严谨论文评审
+# 基于证据的 AI/ML/SciML 论文评审代理技能
 
 面向 AI、ML 和 SciML 的 agent skill：建立主张与证据的可追溯对应关系，审查实验可信度、理论条件与复现边界。
 
@@ -19,12 +19,12 @@
 将仓库克隆到开发目录，再安装技能文件。安装脚本只需要 Python 3.10+ 标准库；使用已安装技能不需要 Python。若 `python` 不在 PATH 中，请替换成你的 Python 3 可执行文件。
 
 ```bash
-git clone https://github.com/qiuqiuqiuqiuh-ui/rigorous-paper-review.git
-cd rigorous-paper-review
+git clone https://github.com/qiuqiuqiuqiuh-ui/ai-ml-sciml-paper-review-skill.git
+cd ai-ml-sciml-paper-review-skill
 python scripts/install_skill.py
 ```
 
-仓库名为 `rigorous-paper-review`；安装目录和调用名保留 `review-papers-rigorously`。默认安装到 `$CODEX_HOME/skills/review-papers-rigorously`；未设置 `CODEX_HOME` 时使用 `~/.codex/skills/review-papers-rigorously`。更新后的技能会在下一轮对话中可用。
+仓库名为 `ai-ml-sciml-paper-review-skill`；安装目录和调用名保留 `review-papers-rigorously`。默认安装到 `$CODEX_HOME/skills/review-papers-rigorously`；未设置 `CODEX_HOME` 时使用 `~/.codex/skills/review-papers-rigorously`。更新后的技能会在下一轮对话中可用。
 
 ## 使用
 

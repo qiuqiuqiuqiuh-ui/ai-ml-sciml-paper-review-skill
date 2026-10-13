@@ -1,13 +1,38 @@
-"""Validate skill metadata and local resource references; not review quality."""
+"""Validate skill packaging and Markdown links; not scientific review quality."""
+import argparse
 import re
-import sys
+import unicodedata
 from pathlib import Path
 from urllib.parse import unquote, urlsplit
 
 import yaml
+from markdown_it import MarkdownIt
 
 
-def validate(root: Path) -> list[str]:
+MARKDOWN = MarkdownIt("commonmark").enable("table")
+
+
+def heading_ids(tokens) -> set[str]:
+    """Generate IDs for ordinary Markdown headings, including duplicate headings."""
+    used = set()
+    for index, token in enumerate(tokens):
+        if token.type != "heading_open":
+            continue
+        children = tokens[index + 1].children or []
+        text = "".join(t.content for t in children if t.type in {"text", "code_inline"})
+        slug = "".join(
+            char for char in text.lower()
+            if char in " _-" or unicodedata.category(char)[0] in "LNM"
+        ).replace(" ", "-")
+        candidate, count = slug, 0
+        while candidate in used:
+            count += 1
+            candidate = f"{slug}-{count}"
+        used.add(candidate)
+    return used
+
+
+def validate(root: Path, *, check_directory_name: bool = False) -> list[str]:
     root = root.resolve()
     errors = []
     skill = root / "SKILL.md"
@@ -26,28 +51,59 @@ def validate(root: Path) -> list[str]:
     name = meta.get("name")
     if not isinstance(name, str) or not re.fullmatch(r"[a-z0-9]+(?:-[a-z0-9]+)*", name) or len(name) > 64:
         errors.append("Invalid skill name")
-    elif name != root.name:
+    elif check_directory_name and name != root.name:
         errors.append("Skill name must match directory name")
     description = meta.get("description")
     if not isinstance(description, str) or not description.strip() or len(description) > 1024:
         errors.append("Description must contain 1-1024 characters")
+    elif description.startswith("[TODO:") or "<" in description or ">" in description:
+        errors.append("Description contains a placeholder or angle brackets")
     allowed = {"name", "description", "license", "allowed-tools", "metadata"}
     if set(meta) - allowed:
         errors.append("Unsupported frontmatter fields: " + ", ".join(sorted(set(meta) - allowed)))
 
+    parsed_docs = {}
+
+    def parse_doc(path: Path):
+        if path not in parsed_docs:
+            document = path.read_text(encoding="utf-8-sig")
+            if path == skill:
+                document = document[match.end():]
+            parsed_docs[path] = MARKDOWN.parse(document)
+        return parsed_docs[path]
+
     def check_path(source: Path, value: str, relative_to: Path):
-        target = (relative_to / unquote(urlsplit(value).path)).resolve()
+        parsed = urlsplit(value)
+        target = (relative_to / unquote(parsed.path)).resolve() if parsed.path else source
         if not target.is_relative_to(root):
             errors.append(f"{source.relative_to(root)}: resource outside skill: {value}")
         elif not target.is_file():
             errors.append(f"{source.relative_to(root)}: missing resource: {value}")
+        elif parsed.fragment and target.suffix.lower() == ".md":
+            if unquote(parsed.fragment) not in heading_ids(parse_doc(target)):
+                errors.append(f"{source.relative_to(root)}: missing heading: {value}")
 
-    for source in [skill, *sorted((root / "references").glob("*.md"))]:
-        for value in re.findall(r"\[[^\]]*\]\(([^\s)]+)\)", source.read_text(encoding="utf-8-sig")):
-            parsed = urlsplit(value)
-            if parsed.scheme or parsed.netloc or not parsed.path:
-                continue
-            check_path(source, value, source.parent)
+    ignored = {".git", ".venv", "__pycache__", ".local-backups"}
+    for source in sorted(root.rglob("*.md")):
+        if ignored.intersection(source.relative_to(root).parts):
+            continue
+        if not source.resolve().is_relative_to(root):
+            errors.append(f"Resource outside skill: {source.relative_to(root)}")
+            continue
+        tokens = parse_doc(source)
+        for token in tokens:
+            if token.type == "inline":
+                for line in token.content.splitlines():
+                    if re.fullmatch(r"\s*\[TODO:[^\n]*\]\s*", line):
+                        errors.append(f"{source.relative_to(root)}: unfinished TODO placeholder")
+                for child in token.children or []:
+                    if child.type not in {"link_open", "image"}:
+                        continue
+                    value = child.attrGet("href" if child.type == "link_open" else "src")
+                    parsed = urlsplit(value)
+                    if parsed.scheme or parsed.netloc:
+                        continue
+                    check_path(source, value, source.parent)
 
     agent = root / "agents" / "openai.yaml"
     if agent.exists():
@@ -84,10 +140,12 @@ def validate(root: Path) -> list[str]:
 
 
 if __name__ == "__main__":
-    if len(sys.argv) > 2:
-        sys.exit("Usage: python scripts/validate_skill.py [skill-directory]")
-    problems = validate(Path(sys.argv[1]) if len(sys.argv) == 2 else Path(__file__).resolve().parents[1])
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("directory", nargs="?", type=Path, default=Path(__file__).resolve().parents[1])
+    parser.add_argument("--installed", action="store_true", help="also require installation directory to match skill name")
+    args = parser.parse_args()
+    problems = validate(args.directory, check_directory_name=args.installed)
     if problems:
         print("\n".join(problems))
-        sys.exit(1)
-    print("Skill structure and local resource references are valid.")
+        raise SystemExit(1)
+    print("Skill metadata, local resources, Markdown headings, and scaffolds are valid.")

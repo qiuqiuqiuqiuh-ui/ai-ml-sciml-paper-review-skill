@@ -1,47 +1,66 @@
-# review-papers-rigorously
+# Rigorous Paper Review
 
-用于 AI、ML、Deep Learning 和 SciML 论文的中文严谨评审技能。将作者主张、论文报告的直接证据、合理推断和未验证部分建立为可追溯账本，并按核心结论选择检查。
+An evidence-grounded agent skill for AI, ML, and SciML paper review, with claim–evidence tracking and reproducibility checks.
 
-## 能做什么
+[中文说明](README.zh-CN.md) · [Example review](examples/resnet-review.md) · [Contributing](CONTRIBUTING.md) · [CI](https://github.com/qiuqiuqiuqiuh-ui/rigorous-paper-review/actions/workflows/validate.yml) · [MIT license](LICENSE)
 
-- 批判性阅读、正式评审、创新性核查、实验可信度审查及复现决策。
-- 检查 baselines、ablations、比较公平性、统计、泄漏、泛化、理论条件和效率。
-- 按需检查 SciML 物理有效性，LLM/Agent 评估，数据集与 benchmark，以及公式到代码的映射。
-- 使用稳定的主张 ID 和问题 ID 更新 rebuttal 证据，区分已解决、部分解决、未解决与无法核查。
+## What makes it useful
 
-技能按材料和问题调整深度。摘要或节选只支持初步分析；静态代码检查、运行成功、结果复现和科学结论验证分别记录。它不能保证评审正确，也不能替代原文核查和领域专家判断。
+- Separate author claims, reported observations, justified inferences, and unanswered questions.
+- Audit baselines, ablations, comparison budgets, statistics, leakage, and generalization.
+- Apply targeted checks for SciML, LLM/Agent evaluation, benchmarks, theory, and code.
+- Track claims and review issues across rebuttals without treating promised experiments as completed evidence.
+- Scale the review to the question and available material; an abstract supports a preliminary assessment.
 
-## 安装与使用
+This is a skill, not a standalone review service. Codex is the tested host. Responses default to Chinese; ask for English when needed. Structural CI does not establish scientific review accuracy, and reading code does not establish independent reproduction.
 
-将本仓库目录复制到你的 Codex 技能目录，例如 `~/.codex/skills/review-papers-rigorously`。仅安装技能本身不需要 Python；Python 和 PyYAML 仅用于仓库校验。
+## Install
 
-```text
-使用 $review-papers-rigorously 评审这篇论文，重点核查核心贡献、比较公平性和结论边界。
+Clone the repository into a development directory, then install its skill files. The installer uses Python 3.10+ and only the standard library; using the installed skill itself does not require Python. Substitute your Python 3 executable for `python` if needed.
 
-使用 $review-papers-rigorously 检查正文与附录中的定理条件，并区分已核查证明和未验证部分。
-
-使用 $review-papers-rigorously 根据这份 rebuttal 和新实验，更新原评审的问题状态。
+```bash
+git clone https://github.com/qiuqiuqiuqiuh-ui/rigorous-paper-review.git
+cd rigorous-paper-review
+python scripts/install_skill.py
 ```
 
-提供 PDF、可访问的论文链接或论文文本；如需代码核查，提供对应版本。正式评审应同时给出会议/期刊量表及材料使用政策。创新性外部核查需要可用检索工具；受联网限制时应标明尚未外部核查。实际复现需明确提出，并提供运行资源与数据。
+The repository name is **rigorous-paper-review**. The installation directory and invocation name remain **review-papers-rigorously** for compatibility. The default destination is `$CODEX_HOME/skills/review-papers-rigorously`, or `~/.codex/skills/review-papers-rigorously` when `CODEX_HOME` is unset. The updated skill is available on your next turn.
 
-## 文件结构
+## Use
 
-- `SKILL.md`：触发范围、证据账本、评审流程和交付要求。
-- `agents/openai.yaml`：显示信息与自动调用策略。
-- `references/sciml.md`：SciML 专项检查。
-- `references/specialized-checks.md`：LLM/Agent、基准、理论和代码检查。
-- `scripts/validate_skill.py`：验证 frontmatter、元数据和本地资源引用。
+```text
+Use $review-papers-rigorously to review this paper in English.
+Focus on evidence for its core claims, comparison fairness, and conclusion boundaries.
 
-## 开发校验
+Use $review-papers-rigorously to check the theorem assumptions and proof.
+
+Use $review-papers-rigorously to update the original review from this rebuttal and new results.
+```
+
+Provide a PDF, accessible paper URL, or paper text, and the matching code version when relevant. Formal reviews should include the venue rubric and material-use policy. External novelty checks need retrieval access; actual reproduction needs an explicit request, data, and a resource budget.
+
+## Update and verify
+
+From the development checkout:
+
+```bash
+git pull --ff-only
+python scripts/install_skill.py --update
+python scripts/install_skill.py --check
+```
+
+Updates first back up the existing installation to `~/.codex/skill-backups/review-papers-rigorously/<UTC timestamp>` by default. The installer prints the actual path, preserves unrelated local files, and writes `INSTALLATION.json` with source commit information, working-tree status, and file hashes. `--check` compares installed skill files with this checkout; it does not verify the running chat's cached context. Use `--target /path/to/review-papers-rigorously` for a custom complete installation path.
+
+## Develop and evaluate
 
 ```bash
 python -m pip install -r requirements-dev.txt
 python scripts/validate_skill.py .
+python -m unittest discover -s tests -v
 ```
 
-GitHub Actions 自动执行相同检查。该检查只验证技能包结构和引用完整性，不衡量实际审稿质量。实际质量应通过真实论文案例核查证据定位、批评成立性及补证建议的必要性。
+Repository validation allows a different checkout name, including GitHub ZIP folders. `--installed` additionally checks the installation directory name. Validation covers metadata, missing local files, Markdown heading links, and unfinished scaffold lines. It parses Markdown links, including reference links, while ignoring code examples. External URLs are not fetched. Only generated Markdown heading anchors are supported; custom HTML anchors are not recognized.
 
-本次修订修复不存在的图标引用，明确有限材料与单点评审范围，兼容理论证据的支持程度措辞，增加代码检查边界与 rebuttal 问题追踪。
+GitHub Actions runs packaging validation and regression tests. Review behavior is evaluated separately using [five synthetic cases and a manual rubric](evals/README.md). These cases are exercises, not reported research results or an estimate of general review accuracy.
 
-仓库尚未指定开源许可证。
+The installed skill contains `SKILL.md`, `agents/`, `references/`, optional assets, and the license. Tests, evaluation cases, and examples stay in the development repository.

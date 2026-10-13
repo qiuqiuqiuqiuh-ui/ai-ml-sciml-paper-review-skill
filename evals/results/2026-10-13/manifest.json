@@ -1,0 +1,48 @@
+{
+  "date": "2026-10-13",
+  "context": "Fresh Codex evaluator context, baseline batch of five cases; no rubric or prior outputs; offline",
+  "model_id": null,
+  "base_commit": "5fb84fb3ddc8aaac8ee9e762f8f12306ea69af91",
+  "hash_format": "SHA256 of UTF-8 bytes with CRLF normalized to LF",
+  "baseline_skill_sha256": "65c401b9939c1fcf2a0c12701d00f053cd6ea44f279677013fc91d7d526d83b2",
+  "baseline_skill_raw_sha256": "7e424d9857133c48899d504ca2b6b6a5fbd440bdb758dbd253137c3c26fa8e5f",
+  "baseline_skill_reconstruction": "Final SKILL.md with the abstract/excerpt locator-verification sentence removed",
+  "inputs": {
+    "01-abstract-only.md": "f45e8fab82d6017076ed13f5e0503093d995fe31361577782ce6697cd756773c",
+    "02-theory.md": "ebdbcc844ade8acdd73a3e17f5154f4cc1954186bc99c47dc634aca19d34ca4c",
+    "03-leakage.md": "abf58f6ef8b9e8aaaf379ab4f5d502c6636aa589551068402d64ae209cffea7a",
+    "04-pinn-residual.md": "15e8d8d558ca2a5c2c5a63f25d1bac0156060ee4433f6f543e138c1fa12ca5c4",
+    "05-rebuttal.md": "4cf1ce1c7c03fa0121b5432ce37bbfe9d44c7fa2f1a467070b82dd67719f3999"
+  },
+  "references": {
+    "sciml.md": "e1c215465ac49ad31bb84f2038390024ccff924347b017c54c4c2fae4d23d843",
+    "specialized-checks.md": "dd53da2fb8092fdef799fb326f153c9f77128d6843d6f34d1ceb23f28679437c"
+  },
+  "baseline_responses": {
+    "01-abstract-only.md": "68186f9676f881ff3d6236ba4378d5c0c1e09822d02b520fd72c6d6b05623e77",
+    "02-theory.md": "f0d575c64cdce477bbf4f6c868de516d400ea4a7b7ad791565f9124fb12f8f74",
+    "03-leakage.md": "9350fc8198465518a4a3dc8cca67b464dafc84917e19371240515dd428bbef51",
+    "04-pinn-residual.md": "55dc3b3cccae1508ff00b15acc8386c3a4275845f336a786b31c06350ccab50c",
+    "05-rebuttal.md": "294f3f6ee726562c1578756b9dad4e4aa13e2e126077a2d86196be6e3fbb6534"
+  },
+  "baseline_assessments": {
+    "01-abstract-only.md": "needs_revision",
+    "02-theory.md": "passed",
+    "03-leakage.md": "passed",
+    "04-pinn-residual.md": "passed",
+    "05-rebuttal.md": "passed"
+  },
+  "retest": {
+    "context": "Second fresh offline evaluator context, one case; no rubric or prior outputs",
+    "skill_sha256": "b291407e27f86005c5c2cd8591c13792b481deef5aed94f95c87713c06b5dafd",
+    "skill_raw_sha256": "847949b22f36fc09fdda099faee5bb90e96835b2fb32b81cc54ccc5ae92eda4a",
+    "case": "01-abstract-only.md",
+    "response_sha256": "aa81b9f368b4f59a5ecf5b2c81e16c0bde9b7e3edb1418bfa86d103a6ddccb10",
+    "assessment": "passed"
+  },
+  "script_environment": {
+    "Python": "3.12",
+    "PyYAML": "6.0.3",
+    "markdown-it-py": "4.2.0"
+  }
+}
